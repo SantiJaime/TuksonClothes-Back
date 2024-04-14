@@ -30,7 +30,19 @@ router.post(
   ],
   createUser
 );
-router.post("/login", loginUser);
+router.post(
+  "/login",
+  [
+    check("email", "Campo correo electrónico vacío").notEmpty(),
+    check("email", "Formato de correo electrónico inválido").isEmail(),
+    check("pass", "Campo contraseña vacío").notEmpty(),
+    check(
+      "pass",
+      "Formato de contraseña inválido. Mínimo de 8 caracteres"
+    ).isLength({ min: 8 }),
+  ],
+  loginUser
+);
 router.put(
   "/:id",
   [check("id", "Formato ID inválido").isMongoId()],
