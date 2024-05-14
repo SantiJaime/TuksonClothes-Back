@@ -4,7 +4,11 @@ const ProductModel = require("../models/product");
 const getAllProducts = async (req, res) => {
   try {
     const allProds = await ProductModel.find();
-    res.status(200).json({ msg: "Productos encontrados", allProds });
+    const serializedProds = allProds.map((prod) => prod.toObject());
+
+    res
+      .status(200)
+      .json({ msg: "Productos encontrados", allProds: serializedProds });
   } catch (error) {
     res
       .status(500)
@@ -26,15 +30,18 @@ const getOneProduct = async (req, res) => {
 };
 const createProduct = async (req, res) => {
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
-    return res.status(422).json(errors.array());
+    return res.status(422).json(errors.array);
   }
   try {
     const newProd = new ProductModel(req.body);
     await newProd.save();
 
-    res.status(201).json({ msg: "Producto creado correctamente", newProd });
+    res.status(201).json({
+      msg: "Producto creado correctamente",
+      newProd: newProd.toObject(),
+      status: 201,
+    });
   } catch (error) {
     res.status(500).json({ msg: "No se pudo crear el producto", error });
   }
@@ -66,7 +73,9 @@ const deleteProduct = async (req, res) => {
   }
   try {
     await ProductModel.findByIdAndDelete({ _id: req.params.id });
-    res.status(200).json({ msg: "Producto eliminado correctamente" });
+    res
+      .status(200)
+      .json({ msg: "Producto eliminado correctamente", status: 200 });
   } catch (error) {
     res.status(500).json({ msg: "No se pudo eliminar el producto", error });
   }

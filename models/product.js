@@ -15,7 +15,6 @@ const ProductSchema = new Schema({
   },
   cantidad: {
     type: Number,
-    required: true,
     default: 1,
   },
   categoria: {

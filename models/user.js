@@ -8,7 +8,7 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   pass: {
     type: String,
@@ -16,7 +16,11 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    default: "user"
+    default: "user",
+  },
+  img: {
+    type: String,
+    default: "http://imgfz.com/i/JORloxQ.jpeg",
   },
   idCart: {
     type: String,
