@@ -9,10 +9,12 @@ const {
   deleteUser,
 } = require("../controllers/users");
 const { check } = require("express-validator");
+const auth = require("../utils/auth");
 
-router.get("/", getAllUsers);
+router.get("/", auth("admin"), getAllUsers);
 router.get(
   "/:id",
+  auth(["user", "admin"]),
   [check("id", "Formato ID inválido").isMongoId()],
   getOneUser
 );
@@ -45,11 +47,13 @@ router.post(
 );
 router.put(
   "/:id",
+  auth(["user", "admin"]),
   [check("id", "Formato ID inválido").isMongoId()],
   updateUser
 );
 router.delete(
   "/:id",
+  auth(["user", "admin"]),
   [check("id", "Formato ID inválido").isMongoId()],
   deleteUser
 );
